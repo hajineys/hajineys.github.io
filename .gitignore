@@ -24,7 +24,10 @@ package-lock.json
 
 # Misc
 _sass/vendors
-assets/js/dist
+assets/js/dist/*
+# except our hand-written override that shadows the theme's sw.min.js
+# to force a byte change (and thus a real update check) on every build
+!assets/js/dist/sw.min.js
 
 # Hidden system files
 *~
