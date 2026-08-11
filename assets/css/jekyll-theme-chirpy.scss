@@ -1,0 +1,309 @@
+---
+---
+
+@use 'abstracts/variables' with (
+  $theme: '{{ site.theme_mode }}'
+);
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* one consistent gap between brand / nav / tools / search instead of
+   each group carrying its own ad-hoc margin (which made the spacing
+   look uneven: 16px, then 8px, then 0px before search) */
+#topbar {
+  gap: 0.9rem;
+}
+
+/* the search pill has its own 8px inner padding before its icon, and
+   the icon buttons have invisible hit-padding around their glyphs, so
+   the gap set above reads as much bigger here than between the icons
+   themselves — pull it in to compensate */
+#search {
+  margin-left: -0.4rem !important;
+}
+
+/* site nav (home/about) now lives in the topbar next to the title */
+#topbar-site-nav {
+  gap: 1.1rem;
+
+  .topbar-nav-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--text-color);
+    text-decoration: none;
+    white-space: nowrap;
+
+    &.active,
+    &:hover {
+      color: var(--link-color);
+    }
+  }
+}
+
+/* brand link replaces the old page-title text (redundant with the
+   hero's own name) and anchors the topbar's left edge */
+#topbar-brand {
+  display: block;
+  width: auto;
+  margin-right: auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--text-color);
+  text-decoration: none;
+
+  &.active,
+  &:hover {
+    color: var(--link-color);
+  }
+}
+
+/* the sidebar was removed; its theme-toggle + social links now live
+   in #topbar-tools, styled to match the old sidebar icon buttons */
+#topbar-tools {
+  gap: 0.5rem;
+
+  #mode-toggle,
+  > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    color: var(--sidebar-btn-color);
+    background-color: var(--sidebar-btn-bg);
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: var(--sidebar-active-color);
+    }
+  }
+
+  .icon-border {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: var(--sidebar-btn-color);
+  }
+
+  /* only one of the light/dark/system icons should render at a time */
+  #mode-toggle > i {
+    display: none;
+  }
+
+  #mode-toggle + .dropdown-menu {
+    background-color: var(--menu-bg);
+    border-color: var(--menu-border-color);
+    box-shadow: var(--menu-shadow-color) 0 1px 4px;
+    border-radius: 0.75rem !important;
+
+    .dropdown-item {
+      border-radius: 0.5rem;
+      color: var(--sidebar-muted-color);
+      font-size: 90%;
+
+      &:hover,
+      &.active {
+        background-color: var(--menu-highlight-bg);
+      }
+
+      > i {
+        color: var(--sidebar-btn-color);
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+:root[data-bs-theme='light'][data-theme-persisted] #topbar-tools #mode-toggle > i[data-theme-mode='light'],
+:root[data-bs-theme='dark'][data-theme-persisted] #topbar-tools #mode-toggle > i[data-theme-mode='dark'],
+:root:not([data-theme-persisted]) #topbar-tools #mode-toggle > i[data-theme-mode='system'] {
+  display: block;
+}
+
+/* no more fixed-position sidebar reserving space on the left */
+#main-wrapper {
+  margin-left: 0 !important;
+}
+
+/* home hero — spec-sheet style profile block, ~2x the original size
+   now that the side panel is gone and it carries the full page width */
+.home-hero {
+  .hero-spec-frame {
+    position: relative;
+    padding: 3.5rem 3rem;
+    border: 1px solid var(--main-border-color);
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+    }
+
+    &::before {
+      top: -1px;
+      left: -1px;
+      border-top: 2px solid var(--link-color);
+      border-left: 2px solid var(--link-color);
+    }
+
+    &::after {
+      bottom: -1px;
+      right: -1px;
+      border-bottom: 2px solid var(--link-color);
+      border-right: 2px solid var(--link-color);
+    }
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    justify-content: space-between;
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", "D2Coding", monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: var(--link-color);
+    margin: 0 0 1.75rem;
+  }
+
+  .hero-name {
+    font-size: 3.4rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.3rem;
+  }
+
+  .hero-role {
+    font-size: 1.35rem;
+    color: var(--heading-color);
+    font-weight: 500;
+    margin: 0 0 2rem;
+  }
+
+  .hero-specs {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    row-gap: 1.1rem;
+    font-size: 1rem;
+    border-top: 1px dashed var(--main-border-color);
+    padding-top: 1.75rem;
+    margin-bottom: 0;
+
+    dt {
+      color: var(--text-muted-color);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      padding-top: 0.2rem;
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+
+  .hero-chip {
+    display: inline-block;
+    font-size: 0.85rem;
+    border: 1px solid var(--main-border-color);
+    border-radius: 4px;
+    padding: 0.25rem 0.55rem;
+    margin: 0 0.4rem 0.4rem 0;
+    color: var(--text-color);
+  }
+}
+
+.project-timeline {
+  display: flex;
+  flex-direction: column;
+
+  .project-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--main-border-color);
+
+    .project-row-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .project-row-stack {
+      font-family: ui-monospace, "SF Mono", "Cascadia Code", "D2Coding", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted-color);
+      white-space: nowrap;
+    }
+
+    &:hover .project-row-name {
+      color: var(--link-color);
+    }
+  }
+}
+
+/* append your custom style below */
+/* topbar/hero/footer all need to share the exact same box so nothing
+   pokes out past the others; Bootstrap's px-lg-3 vs px-md-4 utility
+   classes don't match, so pin one explicit padding value on all three
+   instead of relying on those */
+main[aria-label="Main Content"],
+#tail-wrapper,
+#topbar {
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
+
+/* base theme puts a 4rem right margin on search, meant for the wider
+   sidebar-era layout; it now leaves search short of the topbar's edge */
+#search {
+  margin-right: 0 !important;
+}
+
+/* posts styled as flat rows to match .project-row, so the Posts and
+   Featured Projects columns read as one consistent design language */
+#post-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0 !important;
+
+  .post-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--main-border-color);
+
+    .post-row-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .post-row-meta {
+      font-family: ui-monospace, "SF Mono", "Cascadia Code", "D2Coding", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted-color);
+      white-space: nowrap;
+    }
+
+    &:hover .post-row-name {
+      color: var(--link-color);
+    }
+  }
+}
